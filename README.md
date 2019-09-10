@@ -1,9 +1,19 @@
 # Firebase-HTTP
 A C# class for working with Firebase using HTTP.
 
-**Constructor**
+**Rules**
+
+"rules": {
+    ".read": "auth != null && auth == 'YourKey'",
+    ".write": "auth != null && auth == 'YourKey'"
+}
+
+This are some basic rules, refer to https://firebase.google.com/docs/database/security for more info
+
+**Constructors**
 ```C#
 public FireBaseDatabase(string dataBaseUrl) // the base url of the firebase project note: without the '/' at the end
+public FireBaseDatabase(string dataBaseUrl,string authKey) // the secret key for your database (if you have rules)
 ```
 
 **GET**
