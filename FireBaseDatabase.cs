@@ -7,7 +7,7 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json;
 
-namespace FireBase_Http
+namespace FirebaseClass
 {
     public class FireBaseDatabase
     {
@@ -16,11 +16,19 @@ namespace FireBase_Http
         /// </summary>
         public string BaseURL { get; }
 
+        public string AuthKey = "TgcED9oR7IhwiQMB2jqDoMdpQccjh5daQYTeeTTp";
+
 
         public FireBaseDatabase(string dataBaseUrl)
         {
             BaseURL = dataBaseUrl;
         }
+
+        public FireBaseDatabase(string dataBaseUrl,string authKey) :this(dataBaseUrl)
+        {
+            AuthKey = authKey;
+        }
+
 
         /// <summary>
         /// Sends the obj as json to the given path
@@ -31,8 +39,12 @@ namespace FireBase_Http
         public bool SendData(string jsonPath,object obj)
         {
             var json = JsonConvert.SerializeObject(obj);
-            
-            var request = WebRequest.CreateHttp(BaseURL + "/" + jsonPath);
+            HttpWebRequest request;
+            if(AuthKey == "")
+                request = WebRequest.CreateHttp(BaseURL + "/" + jsonPath);
+            else
+                request = WebRequest.CreateHttp(BaseURL + "/" + jsonPath + "?auth=" + AuthKey);
+
             request.Method = "PUT";
             request.ContentType = "application/json";
             var buffer = Encoding.UTF8.GetBytes(json);
@@ -52,7 +64,12 @@ namespace FireBase_Http
         /// <returns></returns>
         public T GetData<T>(string jsonPath)
         {
-            var request = WebRequest.CreateHttp(BaseURL + "/" + jsonPath);
+            HttpWebRequest request;
+            if(AuthKey == "")
+                request = WebRequest.CreateHttp(BaseURL + "/" + jsonPath);
+            else
+                request = WebRequest.CreateHttp(BaseURL + "/" + jsonPath + "?auth=" + AuthKey);
+
             request.Method = "GET";
             request.ContentType = "application/json";
             var response = request.GetResponse();
@@ -67,7 +84,14 @@ namespace FireBase_Http
         /// <returns></returns>
         public string GetData(string jsonPath)
         {
-            var request = WebRequest.CreateHttp(BaseURL + "/" + jsonPath);
+
+            HttpWebRequest request;
+            if (AuthKey == "")
+                request = WebRequest.CreateHttp(BaseURL + "/" + jsonPath);
+            else
+                request = WebRequest.CreateHttp(BaseURL + "/" + jsonPath + "?auth=" + AuthKey);
+
+
             request.Method = "GET";
             request.ContentType = "application/json";
             var response = request.GetResponse();
@@ -85,7 +109,12 @@ namespace FireBase_Http
         {
             var json = JsonConvert.SerializeObject(obj);
 
-            var request = WebRequest.CreateHttp(BaseURL + "/" + jsonPath);
+            HttpWebRequest request;
+            if(AuthKey == "")
+                request = WebRequest.CreateHttp(BaseURL + "/" + jsonPath);
+            else
+                request = WebRequest.CreateHttp(BaseURL + "/" + jsonPath + "?auth=" + AuthKey);
+
             request.Method = "POST";
             request.ContentType = "application/json";
             var buffer = Encoding.UTF8.GetBytes(json);
@@ -104,7 +133,12 @@ namespace FireBase_Http
         /// <returns></returns>
         public bool DeleteData(string jsonPath)
         {
-            var request = WebRequest.CreateHttp(BaseURL + "/" + jsonPath);
+            HttpWebRequest request;
+            if(AuthKey == "")
+                request = WebRequest.CreateHttp(BaseURL + "/" + jsonPath);
+            else
+                request = WebRequest.CreateHttp(BaseURL + "/" + jsonPath + "?auth=" + AuthKey);
+
             request.Method = "DELETE";
             request.ContentType = "application/json";
             var response = request.GetResponse();
