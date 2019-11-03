@@ -62,3 +62,12 @@ fdb.DeleteData("TestPath/Users.json");
 //     Name:"noteden",
 //     Pass:"34567" 
 ```
+**Get as a List**
+```C#
+List<User> list = fdb.GetListOf<User>("Test.json");
+
+foreach (User item in list)
+{
+    Console.WriteLine(item);
+}
+```
