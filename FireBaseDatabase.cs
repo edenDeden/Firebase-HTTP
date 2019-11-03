@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace FirebaseClass
 {
@@ -145,6 +146,24 @@ namespace FirebaseClass
             string json = (new StreamReader(response.GetResponseStream())).ReadToEnd();
 
             return true;
+        }
+
+        public List<T> GetListOf<T>(string jsonPath)
+        {
+            string data = GetData(jsonPath);
+            JObject jo = JObject.Parse(data);
+            
+
+            List<T> answer = new List<T>();
+
+            foreach (var obj in jo)
+            {
+
+                T item = JsonConvert.DeserializeObject<T>(obj.Value.ToString());
+                answer.Add(item);
+            }
+
+            return answer;
         }
 
     }
